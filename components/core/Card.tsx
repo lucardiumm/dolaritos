@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     spread: {
         marginTop: -20,
         position: 'relative',
-        bottom: '-7.5%',
+        bottom: '-17.5%',
         zIndex: 10,
         borderRadius: 12,
         borderWidth: 2,
