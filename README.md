@@ -11,4 +11,4 @@ yarn .
 
 That's it! 🥳
 
-![Demo](./public/images/Demo.png)
+<img src="./public/images/Demo.png" alt="Demo" width="300">
