@@ -8,14 +8,36 @@ import Binance from '@/components/icons/Binance'
 import Ripio from '@/components/icons/Ripio'
 import BuenBit from '@/components/icons/BuenBit'
 import { router } from 'expo-router'
+import { useEffect, useState } from 'react'
 
-export default function Card({ name, sell, buy, timestamp, variation, spread }: DolaresType) {
+export default function Card({ name, sell, buy, timestamp }: DolaresType) {
+    const [dolarDate, setDolarDate] = useState<number>()
+
+    if (name.includes('Ofic')) {
+        name = name + ' 🏦'
+    } else if (name.includes('Blu')) {
+        name = name + ' 💶'
+    } else if (name.includes('Tarj')) {
+        name = name + ' 💳'
+    } else if (name.includes('Crip')) {
+        name = name + ' ⚡'
+    }
+
     const Press = async () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
         router.push('/items/' + name)
     }
 
-    if (name.includes('lemon') || name.includes('buen') || name.includes('ripio') || name.includes('binance')) {
+    const targetDate = new Date(timestamp).getMilliseconds()
+
+    useEffect(() => {
+        const currenDate = new Date().getMilliseconds()
+
+        const ms = currenDate - targetDate 
+        setDolarDate(Math.floor(ms / (1000 * 60)))
+    })
+
+    if (name.includes('lemon') || name.includes('buen') || name.includes('ripio')) {
         const dotIndex = sell.toString().indexOf('.')
         const finalSell = sell.toString().substring(0, dotIndex + 3)
         const finalBuy = buy.toString().substring(0, dotIndex + 3)
@@ -39,13 +61,9 @@ export default function Card({ name, sell, buy, timestamp, variation, spread }: 
                                 width: 100,
                                 height: 20,
                             }} /> : ''}
-                            {name.includes('binance') ? <Binance style={{
-                                width: 100,
-                                height: 20,
-                            }} /> : ''}
                         </View>
                         <View style={styles.timestampBox}>
-                            <Text style={styles.timeText}>Hace {((Date.now() - timestamp) / 60000).toString().slice(0, 1)} minutos</Text>
+                            <Text style={styles.timeText}>Hace {((Date.now() - parseInt(timestamp)) / 60000).toString().slice(0, 1)} minutos</Text>
                         </View>   
                     </View>
                     
@@ -60,22 +78,15 @@ export default function Card({ name, sell, buy, timestamp, variation, spread }: 
 
     return (
         <View style={styles.fullContainer}>
-            <View style={[styles.spread, {
-                borderColor: variation.toString().includes('-') ? colors.spreadDown : colors.spreadUp,
-                backgroundColor: colors.banner,
-            }]}>
-                <AntDesign name={variation.toString().includes('-') ? 'caretdown' : 'caretup'} style={styles.caret} size={12.5} color={colors.white} />
-                <Text style={styles.amount}>{variation}</Text>
-            </View>
             <TouchableOpacity style={[styles.banner, {
-                borderColor: variation.toString().includes('-') ? colors.spreadDown : colors.spreadUp,
+                borderColor: colors.bannerBorder,
             }]} activeOpacity={0.8} onPress={Press}>
                 <View>
                     <View style={styles.bannerLeftView}>
-                        <Text style={styles.typeText}>{name.includes('informal') ? 'Blue 💵'.toUpperCase() : 'Cripto ⚡'.toUpperCase()}</Text>
+                        <Text style={styles.typeText}>{name.toUpperCase().slice(0, 17)}</Text>
                     </View>
                     <View style={styles.timestampBox}>
-                        <Text style={styles.timeText}>Hace {((Date.now() - timestamp) / 60000).toString().slice(0, 1)} minutos</Text>
+                        <Text style={styles.timeText}>Hace {dolarDate} minutos</Text>
                     </View>
                 </View>
 

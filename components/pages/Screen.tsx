@@ -21,7 +21,6 @@ import * as Progress from 'react-native-progress'
 
 export default function Screen() {
     const db = SQLite.openDatabaseSync('me.db')
-    const socket = io(config.api)
 
     const [refreshing, setRefreshing] = useState(false)
     const [progress, setProgress] = useState(0)
@@ -30,22 +29,18 @@ export default function Screen() {
     const Read = async () => {
         setDolares([])
         
-        await axios.get('https://www.dolarito.ar/api/frontend/quotations/dolar', {
-            headers: {
-                'Auth-Client': '0022200edebd6eaee37427532323d88b'
-            }
+        await axios.get('https://dolarapi.com/v1/dolares', {
+            headers: {}
         }).then((response) => {
             if (response.status === 200) {
-                Object.entries(response.data).forEach(([key, value]: any) => {
-                    if (key.includes('cripto') || key.includes('infor')) {
+                response.data.forEach((value: any) => {
+                    if (value.nombre.includes('Ofic') || value.nombre.includes('Blu') || value.nombre.includes('Cri') || value.nombre.includes('Tarj')) {
                         setDolares(prevDolar => [...prevDolar, {
-                            buy: value.buy != null ? value.buy : '',
-                            sell: value.sell != null ? value.sell : '',
-                            name: key,
-                            timestamp: value.timestamp != null ? value.timestamp : '',
-                            spread: value.spread != null ? value.spread : '',
-                            variation: value.variation != null ? value.variation : '',
-                        }])
+                            buy: value.compra != null ? value.compra : '',
+                            sell: value.venta != null ? value.venta : '',
+                            name: value.nombre,
+                            timestamp: value.fechaActualizacion != null ? value.fechaActualizacion : '',
+                        }])   
                     }
                 })
             }
@@ -57,7 +52,7 @@ export default function Screen() {
             }).then((response) => {
                 if (response.status === 200) {
                     Object.entries(response.data).forEach(([key, value]: any) => {
-                        if (key.includes('lemon') || key.includes('buen') || key.includes('ripio') || key.includes('binance')) {
+                        if (key.includes('lemon') || key.includes('buen') || key.includes('ripio')) {
                             setDolares(prevDolar => [...prevDolar, {
                                 buy: value.buy != null ? value.buy : '',
                                 sell: value.sell != null ? value.sell : '',
@@ -118,8 +113,8 @@ export default function Screen() {
             <ScrollView refreshControl={
                 <RefreshControl tintColor={colors.progressBarUnfilled} refreshing={refreshing} onRefresh={onRefresh} />
             } showsVerticalScrollIndicator={false} style={styles.scroll} contentContainerStyle={styles.scrollViewContainer}>
-                {dolares.map(({ name, buy, sell, variation, spread, timestamp }, index) => (
-                    <Card key={index} name={name} buy={buy} sell={sell} timestamp={timestamp} variation={variation} spread={spread} />
+                {dolares.map(({ name, buy, sell, timestamp }, index) => (
+                    <Card key={index} name={name} buy={buy} sell={sell} timestamp={timestamp} />
                 ))}
             </ScrollView>
         </SafeAreaView>

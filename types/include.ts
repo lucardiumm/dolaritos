@@ -27,9 +27,14 @@ type DolaresType = {
     buy: number;
     sell: number;
     name: string;
-    timestamp: number;
-    variation: number;
-    spread: number;
+    timestamp: string;
+}
+
+type DolarType = {
+    compra: number;
+    venta: number;
+    nombre: string;
+    fechaActualizacion: string;
 }
 
 type DolarListType = [

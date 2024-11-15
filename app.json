@@ -11,13 +11,14 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5FAF57"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dolaritos"
     },
     "android": {
       "package": "com.dolaritos",
@@ -27,8 +28,7 @@
       },
       "permissions": [
         "android.permission.USE_BIOMETRIC",
-        "android.permission.USE_FINGERPRINT",
-        "android.permission.NFC"
+        "android.permission.USE_FINGERPRINT"
       ]
     },
     "web": {
@@ -42,7 +42,6 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ],
-      "react-native-nfc-manager",
       "expo-asset"
     ],
     "extra": {
@@ -51,9 +50,7 @@
       }
     },
     "owner": "luchonsss11",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/1d04bba2-416a-45b6-ad92-83b2cc74cff0"
     }

@@ -1,4 +1,4 @@
-import { Button, Dimensions, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Button, Dimensions, Image, NativeModules, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useFonts } from 'expo-font'
 import { useEffect, useRef, useState } from 'react'
 import { colors } from '../extra/colors'
@@ -7,30 +7,15 @@ import Screen from '../components/pages/Screen'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
+const { LiveActivity } = NativeModules
+
 export default function Page() {
-    const [show, setShow] = useState(false)
-    const router = useRouter()
-
-    const Press = async () => {
-        await LocalAuthentication.authenticateAsync()
-    }
-
     const Load = async () => {
-        if (show === false) {
-            await LocalAuthentication.authenticateAsync({
-                biometricsSecurityLevel: 'strong',
-            }).then((value) => {
-                if (!value.success) {
-                    setShow(false)
-                } else {
-                    Press()
-                }
-            })
-        }
+        LiveActivity
     }
 
     useEffect(() => {
-        // Load()
+        Load()
     })
 
     return (

@@ -51,7 +51,7 @@ export default function Dollar({ name }: DollarCompType) {
         <>
             <SafeAreaView style={styles.container}>
                 <AntDesign onPress={Press} name={'arrowleft'} size={25} color={colors.white} />
-
+                
                 
             </SafeAreaView>
         </>
