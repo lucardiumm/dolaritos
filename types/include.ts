@@ -1,13 +1,11 @@
-export type Trains = {
-    from: number;
-    to: number;
-    departureTime: number;
-    arrivalTime: number;
+export type Dollars = {
+    name: string;
+    spread: number;
+    dateRefresh: number;
+    buy: number;
+    sell: number;
 }
 
 export type Starred = {
     name: string;
-    icon: string;
-    from: number;
-    to: number;
 }
