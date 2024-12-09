@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { colors } from '../extra/colors'
 import { router, useRouter } from 'expo-router'
 import Screen from '../components/pages/Screen'
-import * as LocalAuthentication from 'expo-local-authentication'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 const { LiveActivity } = NativeModules

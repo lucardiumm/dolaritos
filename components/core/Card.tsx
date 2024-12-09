@@ -1,5 +1,4 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import * as Clipboard from 'expo-clipboard'
 import * as Haptics from 'expo-haptics'
 import { colors } from '@/extra/colors'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
@@ -10,8 +9,19 @@ import BuenBit from '@/components/icons/BuenBit'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 
-export default function Card({ name, sell, buy, timestamp }: DolaresType) {
+export default function Card({ casa, name, sell, buy, timestamp }: DolaresType) {
     const [dolarDate, setDolarDate] = useState<number>()
+    const [indicator, setIndicator] = useState('segundos')
+
+    const Press = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
+        
+        if (casa) {
+            router.push('/items/' + casa.toLowerCase())
+        } else {
+            router.push('/items/' + name.toLowerCase())
+        }
+    }
 
     if (name.includes('Ofic')) {
         name = name + ' 🏦'
@@ -21,20 +31,22 @@ export default function Card({ name, sell, buy, timestamp }: DolaresType) {
         name = name + ' 💳'
     } else if (name.includes('Crip')) {
         name = name + ' ⚡'
+    } else if (name.includes('Bols')) {
+        name = name + ' 💰'
     }
-
-    const Press = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
-        router.push('/items/' + name)
-    }
-
-    const targetDate = new Date(timestamp).getMilliseconds()
-
+    
     useEffect(() => {
-        const currenDate = new Date().getMilliseconds()
+        const currenDate = new Date().getSeconds()
+        const targetDate = new Date(timestamp).getMilliseconds()
 
-        const ms = currenDate - targetDate 
-        setDolarDate(Math.floor(ms / (1000 * 60)))
+        const secs = currenDate - targetDate
+        
+        if (secs > 60) {
+            setDolarDate(secs / 60)
+            setIndicator('minutos')    
+        }
+
+        setDolarDate(secs)
     })
 
     if (name.includes('lemon') || name.includes('buen') || name.includes('ripio')) {
@@ -47,7 +59,7 @@ export default function Card({ name, sell, buy, timestamp }: DolaresType) {
                 <TouchableOpacity style={[styles.banner, {
                     borderColor: colors.bannerBorder,
                 }]} activeOpacity={0.8} onPress={Press}>
-                    <View>
+                    <View style={styles.leftView}>
                         <View style={styles.bannerLeftView}>
                             {name.includes('lemon') ? <Lemon style={{
                                 width: 100,
@@ -81,18 +93,18 @@ export default function Card({ name, sell, buy, timestamp }: DolaresType) {
             <TouchableOpacity style={[styles.banner, {
                 borderColor: colors.bannerBorder,
             }]} activeOpacity={0.8} onPress={Press}>
-                <View>
+                <View style={styles.leftView}>
                     <View style={styles.bannerLeftView}>
                         <Text style={styles.typeText}>{name.toUpperCase().slice(0, 17)}</Text>
                     </View>
                     <View style={styles.timestampBox}>
-                        <Text style={styles.timeText}>Hace {dolarDate} minutos</Text>
+                        <Text style={styles.timeText}>Hace {dolarDate} {indicator}</Text>
                     </View>
                 </View>
 
                 <View style={styles.bannerRightView}>
                     <Text style={styles.buyText}><FontAwesome name={'dollar'} size={17.5} color={colors.buy} /> {sell}</Text>
-                    <Text style={styles.sellText}><FontAwesome name={'dollar'} size={15} color={colors.sell} /> {buy}</Text>
+                    <Text style={styles.sellText}>{name.includes('Tar') ? '' : <FontAwesome name={'dollar'} size={15} color={colors.sell} /> } {name.includes('Tar') ? '' : buy}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -108,10 +120,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
     },
+    leftView: {
+        margin: 25,
+        gap: 25,
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignContent: 'flex-start',
+        alignItems: 'flex-start',
+    },  
     timeText: {
         color: colors.light,
         fontFamily: 'mon-sb',
         fontSize: 12,
+        margin: 0,
         fontWeight: '500',
     },
     timestampBox: {
@@ -142,7 +164,6 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     bannerLeftView: {
-        margin: 25,
         gap: 15,
     },
     bannerRightView: {

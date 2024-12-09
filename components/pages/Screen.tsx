@@ -1,10 +1,8 @@
 import { Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { colors } from '../../extra/colors'
 import * as SQLite from 'expo-sqlite'
-import { io } from 'socket.io-client'
 import { config } from '../../extra/config'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { WebView } from 'react-native-webview'
 import Constants from 'expo-constants'
 import { AntDesign, createIconSetFromIcoMoon, Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import { router } from 'expo-router'
@@ -14,10 +12,7 @@ import * as Haptics from 'expo-haptics'
 import { buttons } from '@/extra/buttons'
 import Header from '../navigation/Header'
 import Bar from '../core/Bar'
-import Section from '../navigation/sections/Section'
-import * as LocalAuthentication from 'expo-local-authentication'
 import axios from 'axios'
-import * as Progress from 'react-native-progress'
 
 export default function Screen() {
     const db = SQLite.openDatabaseSync('me.db')
@@ -29,17 +24,18 @@ export default function Screen() {
     const Read = async () => {
         setDolares([])
         
-        await axios.get('https://dolarapi.com/v1/dolares', {
+        await axios.get(config.apis.dolarPrices, {
             headers: {}
         }).then((response) => {
             if (response.status === 200) {
                 response.data.forEach((value: any) => {
-                    if (value.nombre.includes('Ofic') || value.nombre.includes('Blu') || value.nombre.includes('Cri') || value.nombre.includes('Tarj')) {
+                    if (value.nombre.includes('Ofic') || value.nombre.includes('Bols') || value.nombre.includes('Blu') || value.nombre.includes('Cri') || value.nombre.includes('Tarj')) {
                         setDolares(prevDolar => [...prevDolar, {
                             buy: value.compra != null ? value.compra : '',
                             sell: value.venta != null ? value.venta : '',
                             name: value.nombre,
                             timestamp: value.fechaActualizacion != null ? value.fechaActualizacion : '',
+                            casa: value.nombre,
                         }])   
                     }
                 })
@@ -60,6 +56,7 @@ export default function Screen() {
                                 timestamp: value.timestamp != null ? value.timestamp : '',
                                 spread: value.spread != null ? value.spread : '',
                                 variation: value.variation != null ? value.variation : '',
+                                casa: '',
                             }])
                         }
                     })
@@ -85,10 +82,11 @@ export default function Screen() {
     
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.topContainer}></View>
+            <View 
+                // style={styles.topContainer}
+            ></View>
 
             <View style={styles.progressBarView}>
-                <Progress.Bar width={Dimensions.get('window').width - 100} borderRadius={2} height={15} progress={progress} color={colors.progressBarFilled} borderWidth={0} unfilledColor={colors.progressBarUnfilled} />
                 <Text style={styles.progressText}>Próxima actualización en 5 minutos</Text>
             </View>
             
@@ -113,8 +111,8 @@ export default function Screen() {
             <ScrollView refreshControl={
                 <RefreshControl tintColor={colors.progressBarUnfilled} refreshing={refreshing} onRefresh={onRefresh} />
             } showsVerticalScrollIndicator={false} style={styles.scroll} contentContainerStyle={styles.scrollViewContainer}>
-                {dolares.map(({ name, buy, sell, timestamp }, index) => (
-                    <Card key={index} name={name} buy={buy} sell={sell} timestamp={timestamp} />
+                {dolares.map(({ casa, name, buy, sell, timestamp }, index) => (
+                    <Card casa={casa} key={index} name={name} buy={buy} sell={sell} timestamp={timestamp} />
                 ))}
             </ScrollView>
         </SafeAreaView>
