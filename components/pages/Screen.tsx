@@ -20,6 +20,7 @@ export default function Screen() {
     const [refreshing, setRefreshing] = useState(false)
     const [progress, setProgress] = useState(0)
     const [dolares, setDolares] = useState<DolaresType[]>([])
+    const [search, setSearch] = useState('')
 
     const Read = async () => {
         setDolares([])
@@ -65,6 +66,15 @@ export default function Screen() {
         })
     }
 
+    const Filter = () => {
+        if (search.length >= 1) {
+            const result = dolares.filter(el => el.casa.includes(search))
+            setDolares(result)      
+        } else {
+            Read()
+        }
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true)
 
@@ -82,12 +92,22 @@ export default function Screen() {
     
     return (
         <SafeAreaView style={styles.container}>
-            <View 
-                // style={styles.topContainer}
-            ></View>
+            <TextInput
+                placeholder={'Dolar...'}
+                style={styles.input}
+                value={search}
+                onChangeText={(text) => {
+                    setSearch(text)
+                    Filter()
+                }}
+                onSubmitEditing={() => {
+                    Keyboard.dismiss()
+                    Filter()
+                }}
+            />
 
             <View style={styles.progressBarView}>
-                <Text style={styles.progressText}>Próxima actualización en 5 minutos</Text>
+                <Text style={styles.progressText}>Actualizaciónes automaticas cada 1 minuto</Text>
             </View>
             
             <View style={styles.indicator}>
@@ -130,6 +150,17 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+    },
+    input: {
+        marginTop: 10,
+        backgroundColor: colors.inputBack,
+        width: '80%',
+        borderRadius: 6,
+        paddingHorizontal: 15,
+        fontSize: 15,
+        fontWeight: '600',
+        color: colors.white,
+        height: '6%',
     },
     scroll: {
         flexGrow: 0,

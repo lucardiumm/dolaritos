@@ -47,7 +47,7 @@ export default function Dollar({ name, compra, venta }: DollarCompType) {
                         <Text style={styles.switchText}>Tengo pesos argentinos</Text>
                     </Pressable>
                 </View>
-
+                
                 <View style={styles.amountInputContainer}>
                     <TextInput style={styles.amountInput} onSubmitEditing={Submit} value={amount} onChangeText={setAmount} />
                 </View>

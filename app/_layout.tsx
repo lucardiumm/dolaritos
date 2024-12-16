@@ -24,6 +24,9 @@ export default function Layout() {
             <Stack.Screen name={'index'} options={{
                 headerShown: false,
             }} />
+            <Stack.Screen name={'items/[id]'} options={{
+                headerShown: false,
+            }} />
         </Stack>
     )
 }

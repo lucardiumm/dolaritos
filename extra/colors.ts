@@ -24,4 +24,5 @@ export const colors = {
     progressBarFilled: '#B7C2DA',
     bannerBorder: '#2D3748',
     priceContainerFill: '#1A202C',
+    inputBack: '#0F181C',
 }
