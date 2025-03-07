@@ -13,99 +13,28 @@ import { buttons } from '@/extra/buttons'
 import Header from '../navigation/Header'
 import Bar from '../core/Bar'
 import axios from 'axios'
+import { useDollar } from '@/hooks/useDollar'
 
 export default function Screen() {
     const db = SQLite.openDatabaseSync('me.db')
 
     const [refreshing, setRefreshing] = useState(false)
     const [progress, setProgress] = useState(0)
-    const [dolares, setDolares] = useState<DolaresType[]>([])
     const [search, setSearch] = useState('')
-
-    const Read = async () => {
-        setDolares([])
-        
-        await axios.get(config.apis.dolarPrices, {
-            headers: {}
-        }).then((response) => {
-            if (response.status === 200) {
-                response.data.forEach((value: any) => {
-                    if (value.nombre.includes('Ofic') || value.nombre.includes('Bols') || value.nombre.includes('Blu') || value.nombre.includes('Cri') || value.nombre.includes('Tarj')) {
-                        setDolares(prevDolar => [...prevDolar, {
-                            buy: value.compra != null ? value.compra : '',
-                            sell: value.venta != null ? value.venta : '',
-                            name: value.nombre,
-                            timestamp: value.fechaActualizacion != null ? value.fechaActualizacion : '',
-                            casa: value.nombre,
-                        }])   
-                    }
-                })
-            }
-
-            axios.get('https://www.dolarito.ar/api/frontend/quotations/usdt', {
-                headers: {
-                    'Auth-Client': '0022200edebd6eaee37427532323d88b',
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    Object.entries(response.data).forEach(([key, value]: any) => {
-                        if (key.includes('lemon') || key.includes('buen') || key.includes('ripio')) {
-                            setDolares(prevDolar => [...prevDolar, {
-                                buy: value.buy != null ? value.buy : '',
-                                sell: value.sell != null ? value.sell : '',
-                                name: key,
-                                timestamp: value.timestamp != null ? value.timestamp : '',
-                                spread: value.spread != null ? value.spread : '',
-                                variation: value.variation != null ? value.variation : '',
-                                casa: '',
-                            }])
-                        }
-                    })
-                }
-            })
-        })
-    }
-
-    const Filter = () => {
-        if (search.length >= 1) {
-            const result = dolares.filter(el => el.casa.includes(search))
-            setDolares(result)      
-        } else {
-            Read()
-        }
-    }
+    const dolares = useDollar()
 
     const onRefresh = useCallback(() => {
         setRefreshing(true)
 
         setProgress(0)
-        Read()
         
         setTimeout(() => {
             setRefreshing(false)
         }, 1000)
     }, [])
-
-    useEffect(() => {
-        Read()
-    }, [])
     
     return (
         <SafeAreaView style={styles.container}>
-            <TextInput
-                placeholder={'Dolar...'}
-                style={styles.input}
-                value={search}
-                onChangeText={(text) => {
-                    setSearch(text)
-                    Filter()
-                }}
-                onSubmitEditing={() => {
-                    Keyboard.dismiss()
-                    Filter()
-                }}
-            />
-
             <View style={styles.progressBarView}>
                 <Text style={styles.progressText}>Actualizaciónes automaticas cada 1 minuto</Text>
             </View>
@@ -131,8 +60,8 @@ export default function Screen() {
             <ScrollView refreshControl={
                 <RefreshControl tintColor={colors.progressBarUnfilled} refreshing={refreshing} onRefresh={onRefresh} />
             } showsVerticalScrollIndicator={false} style={styles.scroll} contentContainerStyle={styles.scrollViewContainer}>
-                {dolares.map(({ casa, name, buy, sell, timestamp }, index) => (
-                    <Card casa={casa} key={index} name={name} buy={buy} sell={sell} timestamp={timestamp} />
+                {dolares.map(({ name, ask, bid, variation, timestamp }, index) => (
+                    <Card casa={name} key={index} nombre={name} compra={ask} venta={bid} fechaActualizacion={timestamp} spread={variation} />
                 ))}
             </ScrollView>
         </SafeAreaView>

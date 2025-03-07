@@ -23,20 +23,21 @@ type NotesType = {
     title: string;
 }
 
-type DolaresType = {
-    buy: number;
-    casa: string;
-    sell: number;
+type DolarType = {
+    ask: number;
+    bid: number;
     name: string;
     timestamp: string;
+    variation: number;
 }
 
-type DolarType = {
+type DolaresType = {
     compra: number;
     venta: number;
     casa: string;
     nombre: string;
     fechaActualizacion: string;
+    spread: number;
 }
 
 type DolarListType = [

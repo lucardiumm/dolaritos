@@ -24,7 +24,7 @@
       "package": "com.dolarito",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#269E48"
       },
       "permissions": [
         "android.permission.USE_BIOMETRIC",
