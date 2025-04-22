@@ -36,8 +36,8 @@ export default function Card({ name, ask, bid, time }: DolarType) {
                 </View>
                 
                 <View style={styles.bannerRightView}>
-                    <Text style={styles.buyText}><FontAwesome name={'dollar'} size={17.5} color={colors.buy} /> {ask}</Text>
-                    <Text style={styles.sellText}><FontAwesome name={'dollar'} size={15} color={colors.sell} /> {bid}</Text>
+                    <Text style={styles.buyText}><FontAwesome name={'dollar'} size={17.5} color={colors.buy} /> {ask.toFixed(2)}</Text>
+                    <Text style={styles.sellText}><FontAwesome name={'dollar'} size={15} color={colors.sell} /> {bid.toFixed(2)}</Text>
                 </View>
             </TouchableOpacity>
         </View>

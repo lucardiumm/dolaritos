@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Dolarito",
-    "slug": "dolarito",
-    "scheme": "com.dolarito",
+    "name": "Dolaritos",
+    "slug": "dolaritos",
+    "scheme": "com.dolaritos",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,10 +18,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.dolarito"
+      "bundleIdentifier": "com.dolaritos"
     },
     "android": {
-      "package": "com.dolarito",
+      "package": "com.dolaritos",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

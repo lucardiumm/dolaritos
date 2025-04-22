@@ -18,18 +18,29 @@ export default function Page() {
     const db = SQLite.openDatabaseSync('me.db')
 
     const [refreshing, setRefreshing] = useState(false)
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState<number>(0)
 
     const onRefresh = useCallback(() => {
         setRefreshing(true)
 
         refreshDolar()
-        setProgress(0)
         
         setTimeout(() => {
             setRefreshing(false)
         }, 1000)
     }, [])
+
+
+    setInterval(() => {
+        setProgress(progress + 0.05)
+    }, 5000)
+
+    useEffect(() => {
+        if (progress === 1) {
+            refreshDolar()
+            setProgress(0)
+        }
+    })
 
     return (
         <>
