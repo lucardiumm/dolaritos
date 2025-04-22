@@ -11,7 +11,6 @@ export default function Layout() {
                 display: 'none',
             },
         }}>
-            <Tabs.Screen name={'index'} />
             <Tabs.Screen name={'items/[id]'} />
         </Tabs>
     )

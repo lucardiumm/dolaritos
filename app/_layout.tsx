@@ -1,7 +1,5 @@
 import { Stack, Tabs, router } from 'expo-router'
 import { useFonts } from 'expo-font'
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
-import TabBar from '../components/navigation/TabBar'
 
 export default function Layout() {
     const [loaded, error] = useFonts({
@@ -21,7 +19,10 @@ export default function Layout() {
     return (
         <Tabs screenOptions={{
             headerShown: false,
-        }} tabBar={(props) => <TabBar {...props} />}>
+            tabBarStyle: {
+                display: 'none',
+            }
+        }}>
             <Tabs.Screen name={'index'} options={{
                 headerShown: false,
             }} />

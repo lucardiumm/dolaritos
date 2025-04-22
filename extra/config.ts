@@ -1,6 +1,6 @@
 export const config = {
-    oauth: {
-        token: 'https://dribbble.com/oauth/token',
-        user: 'https://api.dribbble.com/v2/user',
-    },
+    apis: {
+        dolarCharts: 'https://app.argentinadatos.com/_file/data/dolares.json',
+        priceListAPI: 'https://criptoya.com/api/USDC/ARS/0.1',
+    }
 }

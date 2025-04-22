@@ -1,98 +1,43 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import * as Clipboard from 'expo-clipboard'
 import * as Haptics from 'expo-haptics'
 import { colors } from '@/extra/colors'
 import { AntDesign, FontAwesome } from '@expo/vector-icons'
 import Lemon from '@/components/icons/Lemon'
-import Binance from '@/components/icons/Binance'
 import Ripio from '@/components/icons/Ripio'
 import BuenBit from '@/components/icons/BuenBit'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 
-export default function Card({ name, sell, buy, timestamp }: DolaresType) {
-    const [dolarDate, setDolarDate] = useState<number>()
-
-    if (name.includes('Ofic')) {
-        name = name + ' 🏦'
-    } else if (name.includes('Blu')) {
-        name = name + ' 💶'
-    } else if (name.includes('Tarj')) {
-        name = name + ' 💳'
-    } else if (name.includes('Crip')) {
-        name = name + ' ⚡'
-    }
+export default function Card({ name, ask, bid, time }: DolarType) {
+    const [dolarDate, setDolarDate] = useState<number>(0)
 
     const Press = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
-        router.push('/items/' + name)
+        
     }
-
-    const targetDate = new Date(timestamp).getMilliseconds()
 
     useEffect(() => {
-        const currenDate = new Date().getMilliseconds()
+        const currenDate = new Date().getSeconds()
 
-        const ms = currenDate - targetDate 
-        setDolarDate(Math.floor(ms / (1000 * 60)))
-    })
-
-    if (name.includes('lemon') || name.includes('buen') || name.includes('ripio')) {
-        const dotIndex = sell.toString().indexOf('.')
-        const finalSell = sell.toString().substring(0, dotIndex + 3)
-        const finalBuy = buy.toString().substring(0, dotIndex + 3)
-        
-        return (
-            <View style={styles.fullContainer}>
-                <TouchableOpacity style={[styles.banner, {
-                    borderColor: colors.bannerBorder,
-                }]} activeOpacity={0.8} onPress={Press}>
-                    <View>
-                        <View style={styles.bannerLeftView}>
-                            {name.includes('lemon') ? <Lemon style={{
-                                width: 100,
-                                height: 20,
-                            }} /> : ''}
-                            {name.includes('buen') ? <BuenBit style={{
-                                width: 100,
-                                height: 20,
-                            }} /> : ''}
-                            {name.includes('ripio') ? <Ripio style={{
-                                width: 100,
-                                height: 20,
-                            }} /> : ''}
-                        </View>
-                        <View style={styles.timestampBox}>
-                            <Text style={styles.timeText}>Hace {((Date.now() - parseInt(timestamp)) / 60000).toString().slice(0, 1)} minutos</Text>
-                        </View>   
-                    </View>
-                    
-                    <View style={styles.bannerRightView}>
-                        <Text style={styles.buyText}><FontAwesome name={'dollar'} size={17.5} color={colors.buy} /> {finalSell}</Text>
-                        <Text style={styles.sellText}><FontAwesome name={'dollar'} size={15} color={colors.sell} /> {finalBuy}</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+        setDolarDate(currenDate)
+    }, [setDolarDate])
 
     return (
         <View style={styles.fullContainer}>
             <TouchableOpacity style={[styles.banner, {
                 borderColor: colors.bannerBorder,
             }]} activeOpacity={0.8} onPress={Press}>
-                <View>
+                <View style={styles.leftView}>
                     <View style={styles.bannerLeftView}>
                         <Text style={styles.typeText}>{name.toUpperCase().slice(0, 17)}</Text>
                     </View>
                     <View style={styles.timestampBox}>
-                        <Text style={styles.timeText}>Hace {dolarDate} minutos</Text>
+                        <Text style={styles.timeText}>Hace {dolarDate} segundos</Text>
                     </View>
                 </View>
-
+                
                 <View style={styles.bannerRightView}>
-                    <Text style={styles.buyText}><FontAwesome name={'dollar'} size={17.5} color={colors.buy} /> {sell}</Text>
-                    <Text style={styles.sellText}><FontAwesome name={'dollar'} size={15} color={colors.sell} /> {buy}</Text>
+                    <Text style={styles.buyText}><FontAwesome name={'dollar'} size={17.5} color={colors.buy} /> {ask}</Text>
+                    <Text style={styles.sellText}><FontAwesome name={'dollar'} size={15} color={colors.sell} /> {bid}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -108,10 +53,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
     },
+    leftView: {
+        margin: 25,
+        gap: 25,
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignContent: 'flex-start',
+        alignItems: 'flex-start',
+    },  
     timeText: {
         color: colors.light,
         fontFamily: 'mon-sb',
         fontSize: 12,
+        margin: 0,
         fontWeight: '500',
     },
     timestampBox: {
@@ -142,7 +97,6 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     bannerLeftView: {
-        margin: 25,
         gap: 15,
     },
     bannerRightView: {

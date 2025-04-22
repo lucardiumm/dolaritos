@@ -25,28 +25,21 @@ type NotesType = {
 
 type DolaresType = {
     buy: number;
+    casa: string;
     sell: number;
     name: string;
     timestamp: string;
 }
 
 type DolarType = {
-    compra: number;
-    venta: number;
-    nombre: string;
-    fechaActualizacion: string;
-}
-
-type DolarListType = [
-    key: any,
-    value: any,
-]
-
-type DollarCompType = {
+    bid: number;
+    ask: number;
     name: string;
+    time: string;
 }
 
-type ChartType = {
-    value: number;
-    date: string;
+type DolarValueType = {
+    bid: number;
+    ask: number;
+    time: number;
 }
