@@ -1,14 +1,15 @@
 # Dolaritos 💶
-### How to run
+### How to run using bun package manager
 1. Install dependencies
 ```sh
-yarn .
+bun install
 ```
 2. Run app
 ```sh
-  yarn start
+  bun start
 ```
 
 That's it! 🥳
+#### Little demo right here 😁
 
 <img src="./public/images/Demo.png" alt="Demo" width="300">
