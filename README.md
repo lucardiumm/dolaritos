@@ -12,4 +12,4 @@ bun install
 That's it! 🥳
 #### Little demo right here 😁
 
-<img src="./public/images/Demo.png" alt="Demo" width="300">
+<img src="/public/images/Demo.png" alt="Demo" width="300">
